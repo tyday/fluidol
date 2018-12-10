@@ -18,9 +18,11 @@ class Seal:
         
         if self.error == 0:
             self.name = 'name'# get name
-            self.description ='description' # get description            
-            self.feature_List = self.get_feature_List()
-            self.benefits_List = self.get_benefits_List()
+            self.description ='description' # get description  
+            self.List1_Name = ""          
+            self.List1 = self.get_List1()
+            self.List2_Name = ""
+            self.List2 = self.get_List2()
         
     def openFluidolSealHtmlPage(self):
         """Opens an html file and searches for seal information
@@ -57,15 +59,17 @@ class Seal:
             if len(item) > 0:
                 returnList.append(item)
         return returnList
-    def get_feature_List(self):
+    def get_List1(self):
         """ Feature List should exist as the 3rd element
             self.htmlInformation[3]
         """
+        self.List1_Name = self.htmlInformation[2].get_text().strip('\n')
         return self.getAttributesList(self.htmlInformation[3])
-    def get_benefits_List(self):
+    def get_List2(self):
         """ Benefits List should exist as the 5th element
             self.htmlInformation[5]
         """
+        self.List2_Name =  self.htmlInformation[4].get_text().strip('\n')
         return self.getAttributesList(self.htmlInformation[5])
         
 if __name__ == "__main__":
