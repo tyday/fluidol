@@ -63,15 +63,23 @@ class Seal:
         """ Feature List should exist as the 3rd element
             self.htmlInformation[3]
         """
-        self.List1_Name = self.htmlInformation[2].get_text().strip('\n')
-        return self.getAttributesList(self.htmlInformation[3])
+        if len(self.htmlInformation) >= 4:
+            self.List1_Name = self.htmlInformation[2].get_text().strip('\n')
+            return self.getAttributesList(self.htmlInformation[3])
+        else:
+            self.List1_Name = "None"
+            return []
     def get_List2(self):
         """ Benefits List should exist as the 5th element
             self.htmlInformation[5]
         """
-        self.List2_Name =  self.htmlInformation[4].get_text().strip('\n')
-        return self.getAttributesList(self.htmlInformation[5])
+        if len(self.htmlInformation) == 6:
+            self.List2_Name =  self.htmlInformation[4].get_text().strip('\n')
+            return self.getAttributesList(self.htmlInformation[5])
+        else:
+            self.List1_Name = "None"
+            return []
         
 if __name__ == "__main__":
     a = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
-    b = a.htmlInformation[3]
+    b = Seal("https://www.fluidol.com/cartridgeMechanical/style44.html")
