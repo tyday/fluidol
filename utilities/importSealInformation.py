@@ -72,7 +72,7 @@ class Seal:
             return ",".join(self.getAttributesList(self.htmlInformation[3]))
         else:
             self.List1_Name = "None"
-            return ""
+            return "None"
     def get_List2(self):
         """ Benefits List should exist as the 5th element
             self.htmlInformation[5]
@@ -81,8 +81,8 @@ class Seal:
             self.List2_Name =  self.htmlInformation[4].get_text().strip('\n')
             return ",".join(self.getAttributesList(self.htmlInformation[5]))
         else:
-            self.List1_Name = "None"
-            return ""
+            self.List2_Name = "None"
+            return "None"
         
 if __name__ == "__main__":
     a = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
@@ -93,5 +93,6 @@ if __name__ == "__main__":
         workbook = openpyxl.Workbook()
     sheet = workbook['Sheet']
     sheet.append([a.name,a.description,a.List1_Name,a.List1,a.List2_Name,a.List2])
+    sheet.append([b.name,b.description,b.List1_Name,b.List1,b.List2_Name,b.List2])
     workbook.save('example.xlsx')
     
