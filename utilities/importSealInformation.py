@@ -4,8 +4,10 @@ Created on Sun Dec  9 05:59:49 2018
 @author: tyrda
 """
 
-import bs4, requests, sys
+import bs4, openpyxl, requests, sys
 from tkinter import Tk
+
+
 class Seal:
     """A seal object from fluidol.com
     
@@ -17,8 +19,8 @@ class Seal:
         self.error, self.htmlInformation = self.openFluidolSealHtmlPage()
         
         if self.error == 0:
-            self.name = 'name'# get name
-            self.description ='description' # get description  
+            self.name = self.htmlInformation[1].strong.extract().get_text()
+            self.description =self.htmlInformation[1].get_text().strip('\n')  
             self.List1_Name = ""          
             self.List1 = self.get_List1()
             self.List2_Name = ""
@@ -41,11 +43,13 @@ class Seal:
             address = Tk().clipboard_get()
         
         sealPage = requests.get(address)
+        sealPage.encoding = 'utf-8'
         if sealPage.status_code != 200:
             print('Could not find web page')
             return 1 , "Could not find web page"
         else:
             fbs = bs4.BeautifulSoup(sealPage.text,"html.parser")
+#            fbs = bs4.BeautifulSoup(sealPage.text,"lxml")
             results = fbs.find_all(class_='mainText')
 #            print(results[0])
             return 0, results
@@ -65,21 +69,29 @@ class Seal:
         """
         if len(self.htmlInformation) >= 4:
             self.List1_Name = self.htmlInformation[2].get_text().strip('\n')
-            return self.getAttributesList(self.htmlInformation[3])
+            return ",".join(self.getAttributesList(self.htmlInformation[3]))
         else:
             self.List1_Name = "None"
-            return []
+            return ""
     def get_List2(self):
         """ Benefits List should exist as the 5th element
             self.htmlInformation[5]
         """
         if len(self.htmlInformation) == 6:
             self.List2_Name =  self.htmlInformation[4].get_text().strip('\n')
-            return self.getAttributesList(self.htmlInformation[5])
+            return ",".join(self.getAttributesList(self.htmlInformation[5]))
         else:
             self.List1_Name = "None"
-            return []
+            return ""
         
 if __name__ == "__main__":
     a = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
     b = Seal("https://www.fluidol.com/cartridgeMechanical/style44.html")
+    try:
+        workbook = openpyxl.load_workbook('example.xlsx')
+    except:
+        workbook = openpyxl.Workbook()
+    sheet = workbook['Sheet']
+    sheet.append([a.name,a.description,a.List1_Name,a.List1,a.List2_Name,a.List2])
+    workbook.save('example.xlsx')
+    
