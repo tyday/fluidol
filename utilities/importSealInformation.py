@@ -90,6 +90,15 @@ class Seal:
         else:
             self.List2_Name = "None"
             return "None"
+    def get_unorganized_list(self):
+        if len(self.htmlInformation)>1:
+            information=[]
+            for item in self.htmlInformation:
+                try:
+                    information.append(item.get_text().strip('\n'))
+                except:
+                    information.append('error')
+            return information
 def create_Seal_List(initial_list):
     """ The seals are divided into category.
         But each category has a link list to its sibling seals
@@ -128,17 +137,47 @@ def add_seals_to_xlsx(seal_list):
             sheet.append(['error'])
     
     workbook.save('seal_information.xlsx')
+def add_unorganized_seal_info_to_xlsx(seal_list):
+    try:
+        workbook = openpyxl.load_workbook('seal_information.xlsx')
+    except:
+        workbook = openpyxl.Workbook()
+    sheet = workbook['Sheet']
+    for seal in seal_list:
+        try:
+            seal_info = Seal(seal)
+            sheet.append(seal_info.get_unorganized_list())
+        except:
+            sheet.append(['error'])
+    
+    workbook.save('seal_information.xlsx')
 if __name__ == "__main__":
 #    a = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
 #    b = Seal("https://www.fluidol.com/cartridgeMechanical/style44.html")
-#    try:
-#        workbook = openpyxl.load_workbook('example.xlsx')
-#    except:
-#        workbook = openpyxl.Workbook()
-#    sheet = workbook['Sheet']
-#    sheet.append([a.name,a.description,a.List1_Name,a.List1,a.List2_Name,a.List2])
-#    sheet.append([b.name,b.description,b.List1_Name,b.List1,b.List2_Name,b.List2])
-#    workbook.save('example.xlsx')
+#    
+    
+    # Using initial list. Create list of all seals and then fill spreadsheet with values
+#    initial_list = [
+#            "https://www.fluidol.com/cartridgeMechanical/style91.html",
+#            "https://www.fluidol.com/multiLipCartridge/style42.html",
+#            "https://www.fluidol.com/multiLipComponent/style45.html",
+#            "https://www.fluidol.com/componentMechanical/style10.html",
+#            "https://www.fluidol.com/mixer/style19.html",
+#            "https://www.fluidol.com/teflonLipSeal/everseal.html",
+#            "https://www.fluidol.com/bearingProtection/style93.html",
+#            "https://www.fluidol.com/braidedPacking/wedgee.html",
+#            "https://www.fluidol.com/lubrication/magnalube1.html",
+#            "https://www.fluidol.com/radialFaceLipSeal/rotaseal.html",
+#            ]
+#    extended_list = create_Seal_List(initial_list)
+#    extended_list = extended_list + initial_list[:]
+#    add_seals_to_xlsx(extended_list)
+    
+    # Test to determine why a seal wasn't printing correctly.
+    # Discovered that the formatting isn't consistent
+    seal19 = Seal("https://www.fluidol.com/cartridgeMechanical/style19.html")
+    
+#         Using initial list. Create list of all seals and then fill spreadsheet with values
     initial_list = [
             "https://www.fluidol.com/cartridgeMechanical/style91.html",
             "https://www.fluidol.com/multiLipCartridge/style42.html",
@@ -153,4 +192,4 @@ if __name__ == "__main__":
             ]
     extended_list = create_Seal_List(initial_list)
     extended_list = extended_list + initial_list[:]
-    add_seals_to_xlsx(extended_list)
+    add_unorganized_seal_info_to_xlsx(extended_list)
