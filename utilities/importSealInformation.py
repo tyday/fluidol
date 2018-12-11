@@ -25,6 +25,13 @@ class Seal:
             self.List1 = self.get_List1()
             self.List2_Name = ""
             self.List2 = self.get_List2()
+        else:
+            self.name = 'error'
+            self.description = 'error' 
+            self.List1_Name = "error"          
+            self.List1 = 'error'
+            self.List2_Name = "error"
+            self.List2 = 'error'
         
     def openFluidolSealHtmlPage(self):
         """Opens an html file and searches for seal information
@@ -83,16 +90,67 @@ class Seal:
         else:
             self.List2_Name = "None"
             return "None"
-        
-if __name__ == "__main__":
-    a = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
-    b = Seal("https://www.fluidol.com/cartridgeMechanical/style44.html")
+def create_Seal_List(initial_list):
+    """ The seals are divided into category.
+        But each category has a link list to its sibling seals
+        This creates a complete list from the link list
+        """
+    root_url = "https://www.fluidol.com"
+    return_list = []
+    for link in initial_list:
+        res = Seal(link)
+        sibling_seals = res.htmlInformation[0]
+        sibling_seals_list = sibling_seals.findAll('a')
+        """ The first link is to the category... so we skip it """
+        for i in range(1,len(sibling_seals_list)):
+            tag = sibling_seals_list[i]
+            tag = tag['href']
+            tag = tag.lstrip('..')
+            tag = root_url + tag
+            return_list.append(tag)
+#    print(sibling_seals)
+#    print(sibling_seals_list)
+#    print(return_list)
+    return return_list
+def add_seals_to_xlsx(seal_list):
     try:
-        workbook = openpyxl.load_workbook('example.xlsx')
+        workbook = openpyxl.load_workbook('seal_information.xlsx')
     except:
         workbook = openpyxl.Workbook()
     sheet = workbook['Sheet']
-    sheet.append([a.name,a.description,a.List1_Name,a.List1,a.List2_Name,a.List2])
-    sheet.append([b.name,b.description,b.List1_Name,b.List1,b.List2_Name,b.List2])
-    workbook.save('example.xlsx')
+    for seal in seal_list:
+        try:
+            seal_info = Seal(seal)
+            sheet.append([seal_info.name, seal_info.description,
+                          seal_info.List1_Name, seal_info.List1, 
+                          seal_info.List2_Name,seal_info.List2])
+        except:
+            sheet.append(['error'])
     
+    workbook.save('seal_information.xlsx')
+if __name__ == "__main__":
+#    a = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
+#    b = Seal("https://www.fluidol.com/cartridgeMechanical/style44.html")
+#    try:
+#        workbook = openpyxl.load_workbook('example.xlsx')
+#    except:
+#        workbook = openpyxl.Workbook()
+#    sheet = workbook['Sheet']
+#    sheet.append([a.name,a.description,a.List1_Name,a.List1,a.List2_Name,a.List2])
+#    sheet.append([b.name,b.description,b.List1_Name,b.List1,b.List2_Name,b.List2])
+#    workbook.save('example.xlsx')
+    initial_list = [
+            "https://www.fluidol.com/cartridgeMechanical/style91.html",
+            "https://www.fluidol.com/multiLipCartridge/style42.html",
+            "https://www.fluidol.com/multiLipComponent/style45.html",
+            "https://www.fluidol.com/componentMechanical/style10.html",
+            "https://www.fluidol.com/mixer/style19.html",
+            "https://www.fluidol.com/teflonLipSeal/everseal.html",
+            "https://www.fluidol.com/bearingProtection/style93.html",
+            "https://www.fluidol.com/braidedPacking/wedgee.html",
+            "https://www.fluidol.com/lubrication/magnalube1.html",
+            "https://www.fluidol.com/radialFaceLipSeal/rotaseal.html",
+            ]
+    extended_list = create_Seal_List(initial_list)
+    extended_list = extended_list + initial_list[:]
+    add_seals_to_xlsx(extended_list)
