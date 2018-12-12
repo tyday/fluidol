@@ -126,7 +126,7 @@ def add_seals_to_xlsx(seal_list):
         workbook = openpyxl.load_workbook('seal_information.xlsx')
     except:
         workbook = openpyxl.Workbook()
-    sheet = workbook['Sheet']
+    sheet = workbook['Organized']
     for seal in seal_list:
         try:
             seal_info = Seal(seal)
@@ -142,7 +142,7 @@ def add_unorganized_seal_info_to_xlsx(seal_list):
         workbook = openpyxl.load_workbook('seal_information.xlsx')
     except:
         workbook = openpyxl.Workbook()
-    sheet = workbook['Sheet']
+    sheet = workbook['Unorganized']
     for seal in seal_list:
         try:
             seal_info = Seal(seal)
@@ -192,4 +192,5 @@ if __name__ == "__main__":
             ]
     extended_list = create_Seal_List(initial_list)
     extended_list = extended_list + initial_list[:]
-    add_unorganized_seal_info_to_xlsx(extended_list)
+#    add_unorganized_seal_info_to_xlsx(extended_list)
+    add_seals_to_xlsx(extended_list)
