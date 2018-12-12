@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<h1>Product Information</h1>
+    {% if product %}
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+    <img src="{{ product.main_photo }}" alt="">
+    {% else %}
+        <p>No product found</p>
+    {% endif %}
+
+{% endblock content %}

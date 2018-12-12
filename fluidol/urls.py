@@ -19,4 +19,5 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('fluidol_index.urls')),
+    path('catalog/', include('fluidol_index.urls')),
 ]
