@@ -1,0 +1,19 @@
+body{
+    margin: 0;
+}
+.header-img{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.top-nav ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
+.top-nav li{
+    margin: 0 10px;
+}
