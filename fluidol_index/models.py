@@ -11,17 +11,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 class Product_benefits(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
 class Product_features(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
 class Product_applications(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
