@@ -4,7 +4,7 @@
     {% if product %}
     <h2>{{ product.name }}</h2>
     <p>{{ product.description }}</p>
-    <img src="{{ product.main_photo }}" alt="">
+    <img src="{{ MEDIA_URL }}{{ product.main_photo }}" alt="{{ product.main_photo_description }}">
     {% else %}
         <p>No product found</p>
     {% endif %}
