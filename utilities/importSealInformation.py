@@ -16,7 +16,7 @@ class Seal:
     """
     def __init__(self, href=""):
         self.href = href
-        self.error, self.htmlInformation = self.openFluidolSealHtmlPage()
+        self.error, self.htmlInformation, self.imgInformation = self.openFluidolSealHtmlPage()
         
         if self.error == 0:
             self.name = self.htmlInformation[1].strong.extract().get_text()
@@ -58,8 +58,9 @@ class Seal:
             fbs = bs4.BeautifulSoup(sealPage.text,"html.parser")
 #            fbs = bs4.BeautifulSoup(sealPage.text,"lxml")
             results = fbs.find_all(class_='mainText')
-#            print(results[0])
-            return 0, results
+            imgResults = fbs.find_all(class_='product3')
+            imgResults += fbs.find_all(class_='productImage')
+            return 0, results, imgResults
     
     def getAttributesList(self, bs4ElementTag):
         """ Converts fluidol Features/benefits list into a list item
@@ -99,6 +100,9 @@ class Seal:
                 except:
                     information.append('error')
             return information
+    def get_image_list(self):
+        if len(self.imgInformation)>1:
+            
 def create_Seal_List(initial_list):
     """ The seals are divided into category.
         But each category has a link list to its sibling seals
@@ -176,21 +180,22 @@ if __name__ == "__main__":
     # Test to determine why a seal wasn't printing correctly.
     # Discovered that the formatting isn't consistent
     seal19 = Seal("https://www.fluidol.com/cartridgeMechanical/style19.html")
+    seal42 = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
     
 #         Using initial list. Create list of all seals and then fill spreadsheet with values
-    initial_list = [
-            "https://www.fluidol.com/cartridgeMechanical/style91.html",
-            "https://www.fluidol.com/multiLipCartridge/style42.html",
-            "https://www.fluidol.com/multiLipComponent/style45.html",
-            "https://www.fluidol.com/componentMechanical/style10.html",
-            "https://www.fluidol.com/mixer/style19.html",
-            "https://www.fluidol.com/teflonLipSeal/everseal.html",
-            "https://www.fluidol.com/bearingProtection/style93.html",
-            "https://www.fluidol.com/braidedPacking/wedgee.html",
-            "https://www.fluidol.com/lubrication/magnalube1.html",
-            "https://www.fluidol.com/radialFaceLipSeal/rotaseal.html",
-            ]
-    extended_list = create_Seal_List(initial_list)
-    extended_list = extended_list + initial_list[:]
-#    add_unorganized_seal_info_to_xlsx(extended_list)
-    add_seals_to_xlsx(extended_list)
+#    initial_list = [
+#            "https://www.fluidol.com/cartridgeMechanical/style91.html",
+#            "https://www.fluidol.com/multiLipCartridge/style42.html",
+#            "https://www.fluidol.com/multiLipComponent/style45.html",
+#            "https://www.fluidol.com/componentMechanical/style10.html",
+#            "https://www.fluidol.com/mixer/style19.html",
+#            "https://www.fluidol.com/teflonLipSeal/everseal.html",
+#            "https://www.fluidol.com/bearingProtection/style93.html",
+#            "https://www.fluidol.com/braidedPacking/wedgee.html",
+#            "https://www.fluidol.com/lubrication/magnalube1.html",
+#            "https://www.fluidol.com/radialFaceLipSeal/rotaseal.html",
+#            ]
+#    extended_list = create_Seal_List(initial_list)
+#    extended_list = extended_list + initial_list[:]
+##    add_unorganized_seal_info_to_xlsx(extended_list)
+#    add_seals_to_xlsx(extended_list)
