@@ -60,6 +60,7 @@ class Seal:
             results = fbs.find_all(class_='mainText')
             imgResults = fbs.find_all(class_='product3')
             imgResults += fbs.find_all(class_='productImage')
+#            docResults = fbs.find
             return 0, results, imgResults
     
     def getAttributesList(self, bs4ElementTag):
@@ -101,8 +102,30 @@ class Seal:
                     information.append('error')
             return information
     def get_image_list(self):
+        root_url = "https://www.fluidol.com"
+        return_list = []
+        return_list_front = []
         if len(self.imgInformation)>1:
-            
+            for image in self.imgInformation:
+                if 'productImage' in image['class']:
+                    image_alt = image['alt']
+                    image_src = root_url + image['src'].lstrip('.')
+#                    return_list_front.append(image_alt + ',' + image_src)
+                    return_list_front.append(image_alt)
+                    return_list_front.append(image_src)
+                else:
+                    image_alt = image['alt']
+                    image_src = root_url + image['src'].lstrip('.')
+#                    return_list.append(image_alt + ',' + image_src)
+                    return_list.append(image_alt)
+                    return_list.append(image_src)
+            return return_list_front + return_list
+        else:
+            return ['no images']
+    def get_document_list(self):
+        root_url = "https://www.fluidol.com"
+        return_list = []
+        
 def create_Seal_List(initial_list):
     """ The seals are divided into category.
         But each category has a link list to its sibling seals
@@ -155,47 +178,46 @@ def add_unorganized_seal_info_to_xlsx(seal_list):
             sheet.append(['error'])
     
     workbook.save('seal_information.xlsx')
+def add_images_to_xlsx(seal_list):
+    try:
+        workbook = openpyxl.load_workbook('seal_information.xlsx')
+    except:
+        workbook = openpyxl.Workbook()
+    try:
+        sheet = workbook['Images']
+    except:
+        sheet = workbook.create_sheet('Images')
+    for seal in seal_list:
+        try:
+            seal_info = Seal(seal)
+            sheet.append(seal_info.get_image_list
+                         ())
+        except:
+            sheet.append(['error'])
+    
+    workbook.save('seal_information.xlsx')
 if __name__ == "__main__":
-#    a = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
-#    b = Seal("https://www.fluidol.com/cartridgeMechanical/style44.html")
-#    
-    
-    # Using initial list. Create list of all seals and then fill spreadsheet with values
-#    initial_list = [
-#            "https://www.fluidol.com/cartridgeMechanical/style91.html",
-#            "https://www.fluidol.com/multiLipCartridge/style42.html",
-#            "https://www.fluidol.com/multiLipComponent/style45.html",
-#            "https://www.fluidol.com/componentMechanical/style10.html",
-#            "https://www.fluidol.com/mixer/style19.html",
-#            "https://www.fluidol.com/teflonLipSeal/everseal.html",
-#            "https://www.fluidol.com/bearingProtection/style93.html",
-#            "https://www.fluidol.com/braidedPacking/wedgee.html",
-#            "https://www.fluidol.com/lubrication/magnalube1.html",
-#            "https://www.fluidol.com/radialFaceLipSeal/rotaseal.html",
-#            ]
-#    extended_list = create_Seal_List(initial_list)
-#    extended_list = extended_list + initial_list[:]
-#    add_seals_to_xlsx(extended_list)
-    
-    # Test to determine why a seal wasn't printing correctly.
-    # Discovered that the formatting isn't consistent
+    # Experimental seal
     seal19 = Seal("https://www.fluidol.com/cartridgeMechanical/style19.html")
     seal42 = Seal("https://www.fluidol.com/cartridgeMechanical/style42.html")
     
+
 #         Using initial list. Create list of all seals and then fill spreadsheet with values
-#    initial_list = [
-#            "https://www.fluidol.com/cartridgeMechanical/style91.html",
-#            "https://www.fluidol.com/multiLipCartridge/style42.html",
-#            "https://www.fluidol.com/multiLipComponent/style45.html",
-#            "https://www.fluidol.com/componentMechanical/style10.html",
-#            "https://www.fluidol.com/mixer/style19.html",
-#            "https://www.fluidol.com/teflonLipSeal/everseal.html",
-#            "https://www.fluidol.com/bearingProtection/style93.html",
-#            "https://www.fluidol.com/braidedPacking/wedgee.html",
-#            "https://www.fluidol.com/lubrication/magnalube1.html",
-#            "https://www.fluidol.com/radialFaceLipSeal/rotaseal.html",
-#            ]
-#    extended_list = create_Seal_List(initial_list)
-#    extended_list = extended_list + initial_list[:]
-##    add_unorganized_seal_info_to_xlsx(extended_list)
+    initial_list = [
+            "https://www.fluidol.com/cartridgeMechanical/style91.html",
+            "https://www.fluidol.com/multiLipCartridge/style42.html",
+            "https://www.fluidol.com/multiLipComponent/style45.html",
+            "https://www.fluidol.com/componentMechanical/style10.html",
+            "https://www.fluidol.com/mixer/style19.html",
+            "https://www.fluidol.com/teflonLipSeal/everseal.html",
+            "https://www.fluidol.com/bearingProtection/style93.html",
+            "https://www.fluidol.com/braidedPacking/wedgee.html",
+            "https://www.fluidol.com/lubrication/magnalube1.html",
+            "https://www.fluidol.com/radialFaceLipSeal/rotaseal.html",
+            ]
+    extended_list = create_Seal_List(initial_list)
+    extended_list = extended_list + initial_list[:]
+    
 #    add_seals_to_xlsx(extended_list)
+    add_unorganized_seal_info_to_xlsx(extended_list)
+#    add_images_to_xlsx(extended_list)
