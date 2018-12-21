@@ -1,5 +1,5 @@
 import openpyxl, os, requests, urllib
-from fluidol_index.models import Product, Category
+from fluidol_index.models import Product, Category, Product_applications, Product_benefits, Product_features
 from fluidol.settings import MEDIA_ROOT
 from django.core.management.base import BaseCommand 
 
@@ -63,23 +63,21 @@ def upload_seal():
                 industries = amalgamatedSheet.cell(row=i,column=7).value.split(',')
             except:
                 industries = []
-        # try:
-            mainImageTxt = amalgamatedSheet.cell(row=i,column=8).value
-            # mainImage = get_image(amalgamatedSheet.cell(row=i,column=9).value)
-            mainImage = save_and_report_image(amalgamatedSheet.cell(row=i,column=9).value)
-            # print(type(mainImage), mainImage,mainImage[0])
-            # except:
-            #     mainImageTxt = None
-            #     mainImage = None
             try:
-                optImg1Txt = amalgamatedSheet.cell(row=i,column=8).value
-                optImg1 = amalgamatedSheet.cell(row=i,column=9).value
+                mainImageTxt = amalgamatedSheet.cell(row=i,column=8).value
+                mainImage = save_and_report_image(amalgamatedSheet.cell(row=i,column=9).value)
+            except:
+                mainImageTxt = None
+                mainImage = None
+            try:
+                optImg1Txt = amalgamatedSheet.cell(row=i,column=10).value
+                optImg1 = save_and_report_image(amalgamatedSheet.cell(row=i,column=11).value)
             except:
                 optImg1Txt = None
                 optImg1 = None
             try:
-                optImg2Txt = amalgamatedSheet.cell(row=i,column=8).value
-                optImg2 = amalgamatedSheet.cell(row=i,column=9).value
+                optImg2Txt = amalgamatedSheet.cell(row=i,column=12).value
+                optImg2 = save_and_report_image(amalgamatedSheet.cell(row=i,column=13).value)
             except:
                 optImg2Txt = None
                 optImg2 = None
@@ -97,7 +95,8 @@ def upload_seal():
                 # product.category_set.add(cat)
             product.description = description
             # for feature in features:
-            #     product.Product_features = feature
+            #     # product.Product_features = feature
+            #     try findFeat = Feat
             # for benefit in benefits:
             #     product.Product_benefits = benefit
             # for application in applications:
