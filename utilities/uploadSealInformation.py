@@ -1,5 +1,5 @@
 import openpyxl
-from fluidol_index.models import Product
+#from fluidol_index.models import Product
 # import fluidol_index.models.Product
 # from ..fluidol_index.models import Product
 # from .. import fluidol_index
@@ -7,7 +7,7 @@ workbook = openpyxl.load_workbook('seal_information.xlsx')
 amalgamatedSheet = workbook['Amalgamated']
 
 def upload_seal():
-    for i in range(2,51):
+    for i in range(2,4):
         name = amalgamatedSheet.cell(row=i,column=1).value
         if name:
             try:
