@@ -39,7 +39,7 @@ def save_and_report_image(image_url):
     return name
 
 def upload_seal():
-    for i in range(2,5): #range(2,51)
+    for i in range(2,51): #range(2,51)
         name = amalgamatedSheet.cell(row=i,column=1).value
         if name:
             try:
