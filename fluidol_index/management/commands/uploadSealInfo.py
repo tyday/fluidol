@@ -94,9 +94,14 @@ def upload_seal():
                     product.category.add(findCat)
                 # product.category_set.add(cat)
             product.description = description
-            # for feature in features:
-            #     # product.Product_features = feature
-            #     try findFeat = Feat
+            for feature in features:
+                # product.Product_features = feature
+                try:
+                    findFeat = Product_features.objects.get(name=feature)
+                    product.Product_features.add(findFeat)
+                except:
+                    findFeat = Product_features.objects.create(name=feature)
+                    product.Product_features.add(findFeat)
             # for benefit in benefits:
             #     product.Product_benefits = benefit
             # for application in applications:
