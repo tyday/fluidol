@@ -86,6 +86,7 @@ def upload_seal():
             # product.name = name
             for cat in category:
                 # product.category = category
+                cat = cat.strip()
                 try:
                     findCat = Category.objects.get(name=cat)
                     product.category.add(findCat)
@@ -96,16 +97,32 @@ def upload_seal():
             product.description = description
             for feature in features:
                 # product.Product_features = feature
+                feature = feature.strip()
                 try:
                     findFeat = Product_features.objects.get(name=feature)
                     product.Product_features.add(findFeat)
                 except:
                     findFeat = Product_features.objects.create(name=feature)
                     product.Product_features.add(findFeat)
-            # for benefit in benefits:
+            for benefit in benefits:
             #     product.Product_benefits = benefit
-            # for application in applications:
-            #     product.Product_applications = application
+                benefit = benefit.strip()
+                try:
+                    findBenny = Product_benefits.objects.get(name=benefit)
+                    product.Product_benefits.add(findBenny)
+                except:
+                    findBenny = Product_benefits.objects.create(name=benefit)
+                    product.Product_benefits.add(findBenny)
+            for application in applications:
+                # product.Product_applications = application
+                application = application.strip()
+                try:
+                    findApplication = Product_applications.objects.get(name=application)
+                    product.Product_applications.add(findApplication)
+                except:
+                    findApplication = Product_applications.objects.create(name=application)
+                    product.Product_applications.add(findApplication)
+                
             # Does not look like industries is in model yet
             # for industry in industries:
             #     product.Product_industries = industry
