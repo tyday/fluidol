@@ -28,6 +28,7 @@ class Product_applications(models.Model):
        
 class Product(models.Model):
     name = models.CharField(max_length=100)
+    short_name = models.CharField(max_length=100, null=True)
     category = models.ManyToManyField(Category)
     description = models.TextField()
     main_photo = models.ImageField(null=True,blank=True)
